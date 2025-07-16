@@ -8,25 +8,32 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import de.qordio.app.dataservice.entity.AppUser;
+import de.qordio.app.dataservice.entity.content.enums.ContentStatus;
+import de.qordio.app.dataservice.entity.lookups.LookupContentType;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "content_items")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "content_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class ContentItem extends PanacheEntityBase {
+@DiscriminatorColumn(name = "content_type_value", discriminatorType = DiscriminatorType.STRING)
+public class ContentItem extends PanacheEntityBase { // nicht mehr abstract
 
     @Id
     @GeneratedValue
@@ -41,19 +48,23 @@ public abstract class ContentItem extends PanacheEntityBase {
     @Column(name = "preview_description", columnDefinition = "TEXT")
     public String previewDescription;
 
-    // TODO: Anpassung auf Lookup-Tabelle
-    @Column(name = "content_type", insertable = false, updatable = false, nullable = false)
-    public String contentType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content_type_id", nullable = false)
+    public LookupContentType contentType;
 
-    @Column(name = "like_count", nullable = false, columnDefinition = "INT DEFAULT 0") 
+    @Column(name = "like_count", nullable = false) 
     public int likeCount = 0;
 
     @OneToMany(mappedBy = "contentItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) 
     private List<ContentLike> likes = new ArrayList<>(); 
 
-    // TODO: Ergänzung von... 
-    // author_id VARCHAR(255) NOT NULL, -- TODO: Referenz auf User
-    // status VARCHAR(20) DEFAULT 'PRIVATE' CHECK (status IN ('PRIVATE', 'PUBLIC')),
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = true)
+    public AppUser author;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    public ContentStatus status = ContentStatus.PRIVATE;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

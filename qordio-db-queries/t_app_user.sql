@@ -1,6 +1,6 @@
 CREATE TABLE app_user (
     keycloak_id VARCHAR(255), -- UUID aus KeyCloak / primary Key
-    location_limit INT;
+    location_limit INT,
     PRIMARY KEY (keycloak_id)
 );
 

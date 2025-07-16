@@ -6,7 +6,8 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
+ 
+import de.qordio.app.dataservice.entity.AppUser;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,8 +34,11 @@ public class ContentLike extends PanacheEntityBase {
     @OnDelete(action = OnDeleteAction.CASCADE)
     public ContentItem contentItem;
 
-    @Column(name = "user_id", nullable = false)
-    public String userId; // Keycloak User ID
+    // ERLEDIGT: String durch Referenz zur User-Entität ersetzt
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    public AppUser user;
 
     @CreationTimestamp
     @Column(name = "liked_at", updatable = false)
@@ -42,8 +46,9 @@ public class ContentLike extends PanacheEntityBase {
 
     public ContentLike() {}
 
-    public ContentLike(ContentItem contentItem, String userId) {
+    // Konstruktor ebenfalls angepasst
+    public ContentLike(ContentItem contentItem, AppUser user) {
         this.contentItem = contentItem;
-        this.userId = userId;
+        this.user = user;
     }
 }

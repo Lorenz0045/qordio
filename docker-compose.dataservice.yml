@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   qordio-data-service:
-    image: ghcr.io/Lorenz0045/qordio-data-service:latest # Das Image wird vom CI/CD-Workflow in die GitHub Container Registry gepusht.
+    image: ghcr.io/lorenz0045/qordio-data-service:latest # Das Image wird vom CI/CD-Workflow in die GitHub Container Registry gepusht.
     container_name: qordio-data-service
     restart: unless-stopped
     environment:
@@ -15,7 +15,7 @@ services:
 
       # --- Keycloak JWT Validierung ---
       # Diese Variablen füllen die Platzhalter in application.properties für mp.jwt.verify.*
-      KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL:-https://keycloak.ingolstadt.dynv6.net/realms/Aryuveda}
+      KEYCLOAK_AUTH_SERVER_URL: ${KEYCLOAK_AUTH_SERVER_URL:-https://keycloak.qordio.de/realms/Aryuveda}
       # Client-ID des Backends selbst. Kann auch eine Liste sein, wenn Tokens von Kogito weitergeleitet werden.
       KEYCLOAK_BACKEND_CLIENT_ID: ${KEYCLOAK_BACKEND_CLIENT_ID:-qordio-data-service}
       # Wenn Kogito auch Tokens prüfen soll:
@@ -28,7 +28,7 @@ services:
       # QUARKUS_LOG_CATEGORY__IO_QUARKUS__LEVEL: DEBUG # Beispiel für spezifische Kategorie
 
       # --- Hibernate ORM ---
-      QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION: update # Optionen: none, create, drop-and-create, drop, update, validate
+      QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION: validate # Optionen: none, create, drop-and-create, drop, update, validate
       QUARKUS_HIBERNATE_ORM_LOG_SQL: "false"
 
     # 'expose' macht den Port nur für andere Container in denselben Netzwerken verfügbar

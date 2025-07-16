@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   qordio-frontend: # Service-Name, wichtig für die interne DNS-Auflösung in Docker
-    image: ghcr.io/Lorenz0045/qordio-frontend:latest # zieht aktuellstes img aus github 
+    image: ghcr.io/lorenz0045/qordio-frontend:latest # zieht aktuellstes img aus github 
     container_name: qordio-frontend 
     restart: unless-stopped
     expose: # Macht den Port nur für andere Container im selben Docker-Netzwerk verfügbar
