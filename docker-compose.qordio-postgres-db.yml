@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  qordio-postgres-db:
+    image: postgres:16-alpine # Aktuelle stabile Postgres-Version, Alpine für geringere Größe
+    container_name: qordio-postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-qordio}  # Standardwert, wenn nicht in .env gesetzt
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qordiopassword123} # Standardwert, wenn nicht in .env gesetzt
+      POSTGRES_DB: ${POSTGRES_DB:-qordio_data_db}          # Standardwert, wenn nicht in .env gesetzt
+    volumes:
+      - qordio_postgres_data:/var/lib/postgresql/data # Persistentes Volume
+    ports:
+      - "15432:5432" # Exponiere den Port nach außen (optional, wenn nur intern erreichbar)
+                                    # Der Standardwert wird verwendet, wenn POSTGRES_PORT nicht in .env gesetzt ist
+    networks:
+      - qordio-backend-network # Verbindet mit dem externen Netzwerk
+
+volumes:
+  qordio_postgres_data: # Definiert das Volume für persistente Daten
+    driver: local # Oder ein anderer Volume-Treiber deiner Wahl
+
+networks:
+  qordio-backend-network: # Definiert das Netzwerk, das auch vom Backend genutzt wird
+    external: true # Wichtig: Dieses Netzwerk muss extern erstellt werden oder von einer anderen Compose-Datei
+                   # oder manuell über `docker network create qordio-backend-network`
