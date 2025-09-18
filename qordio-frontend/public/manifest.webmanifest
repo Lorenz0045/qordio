@@ -1,7 +1,7 @@
 {
-  "name": "Ayurly",
-  "short_name": "Ayurly",
-  "description": "Deine Ayurveda Lifestyle Plattform.",
+  "name": "qordio",
+  "short_name": "qordio",
+  "description": "Deine Lifestyle Plattform.",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",

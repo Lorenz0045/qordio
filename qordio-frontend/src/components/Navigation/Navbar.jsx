@@ -50,7 +50,7 @@ const Navbar = () => {
     }, [location]);
 
     if (loadingKeycloak) {
-        return <nav className={styles.navContainer}><div className={styles.logo}>ayurly</div></nav>;
+        return <nav className={styles.navContainer}><div className={styles.logo}>qordio</div></nav>;
     }
 
     return (
